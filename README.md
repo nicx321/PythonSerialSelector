@@ -2,7 +2,7 @@
 Graphical serial port selector for python 3
 
 This script will easily let you select serial port and save it into conf file.
-usage:
+usage
 	import serialSelect
 	port = serialSelect.Select("conf.conf", 9600)
 
