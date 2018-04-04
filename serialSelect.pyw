@@ -27,7 +27,7 @@ def opport():
                 timeout=None)
     PortS.destroy()
         
-def Select(baudrateii, SaveConfi, bytesizeii=serial.EIGHTBITS, stopbitsii=serial.STOPBITS_ONE, parityii=serial.PARITY_NONE, timeoutii=None, pathi=None):
+def Select(baudrateii, SaveConfi=False, pathi=None, bytesizeii=serial.EIGHTBITS, stopbitsii=serial.STOPBITS_ONE, parityii=serial.PARITY_NONE, timeoutii=None):
     global inputt, path, baudratei, bytesizei, stopbitsi, parityi, PortS, port
 
     SaveConf=SaveConfi
