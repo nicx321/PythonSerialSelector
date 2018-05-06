@@ -2,7 +2,7 @@
 1. Graphical serial port selector for python 3
 
 2. This script will easily let you select serial port and save it into conf file.
-3. this script require "serial" and "tkinter" modules
+3. This script require "serial" and "tkinter" modules
 4. usage:
 	```
 	import serialSelect
