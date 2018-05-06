@@ -2,50 +2,39 @@ import serial.tools.list_ports
 import serial
 from tkinter import *
 
-path = None
-inputt = None
-baudratei = None
-bytesizei = None
-stopbitsi = None
-parityi = None
-PortS = None
-timeouti=None
 port = None
-SaveConf=None
 
-def opport():
-    global inputt, path, baudratei, baudratei, bytesizei, stopbitsi, parityi, PortS, port
+def opport(path, baudrate, bytesize, stopbits, parity, PortS, SaveConf, timeout, xonxoff, rtscts, dsrdtr, tkvar):
+    global port
     if SaveConf:
         with open(path,"w") as f:
-            f.write(inputt.get())
+            f.write(tkvar.get())
             f.write('\n')
-    port = serial.Serial(port=inputt.get(),
-                baudrate=baudratei,
-                bytesize=bytesizei,
-                stopbits=stopbitsi,
-                parity=parityi,
-                timeout=None)
+    port = serial.Serial()
+    port.port=tkvar.get()
+    port.baudrate=baudrate
+    port.bytesize=bytesize
+    port.stopbits=stopbits
+    port.parity=parity
+    port.timeout=timeout
+    port.xonxoff=xonxoff
+    port.rtscts=rtscts
+    port.dsrdtr=dsrdtr
     PortS.destroy()
         
-def Select(baudrateii, SaveConfi=False, pathi=None, bytesizeii=serial.EIGHTBITS, stopbitsii=serial.STOPBITS_ONE, parityii=serial.PARITY_NONE, timeoutii=None):
-    global inputt, path, baudratei, bytesizei, stopbitsi, parityi, PortS, port
-
-    SaveConf=SaveConfi
-    inputt = inputt
-    path = pathi
-    baudratei = baudrateii
-    bytesizei = bytesizeii
-    stopbitsi = stopbitsii
-    parityi = parityii
-    timeouti=timeoutii
-
+def Select(baudrate, SaveConf=False, path=None, bytesize=serial.EIGHTBITS, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE, timeout=None, xonxoff=False, rtscts=False, dsrdtr=False):
     PortS = Tk()
+    PortS.geometry('240x60')
     PortS.title("Configurator")
+    tkvar = StringVar(PortS)
     listp = serial.tools.list_ports.comports()
     connected = []
+    choices = {}
     
+    i=0
     for element in listp:
-        connected.append(element.device)
+        choices[element.device]=i
+        i+=1
     if SaveConf:
         try:
             with open(path,"r+") as f:
@@ -56,14 +45,16 @@ def Select(baudrateii, SaveConfi=False, pathi=None, bytesizeii=serial.EIGHTBITS,
     else:
         lines = [""]
         
-    Label(PortS, text="COM ports: "+str(connected)).grid(row=0, column=0)
-    inputt = Entry(PortS)
-    inputt.grid(row=0, column=1)
-    if SaveConf:
-        inputt.insert(END, lines[0])
-    Button(PortS, text="SET", command=opport, width = 10).grid(row=2, column=0, sticky=N+S, columnspan=2)
+    Label(PortS, text="COM port: ",font=(None,12)).place(x=35, y=4)
+    inputt = OptionMenu(PortS, tkvar, *choices)
+    inputt.place(x=130, y=0)
+    if SaveConf and lines[0]!="":
+        tkvar.set(lines[0])
+    else:
+        tkvar.set("Select")
+        
+    PortS.bind("<Return>", lambda event: opport(path, baudrate, bytesize, stopbits, parity, PortS, SaveConf, timeout, xonxoff, rtscts, dsrdtr, tkvar))
+    B = Button(PortS, text="SET", command= lambda: opport(path, baudrate, bytesize, stopbits, parity, PortS, SaveConf, timeout, xonxoff, rtscts, dsrdtr, tkvar), width = 10)
+    B.place(x=85, y=30)
     PortS.mainloop()
-
     return port
-
-    
