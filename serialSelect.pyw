@@ -23,6 +23,39 @@ def opport(path, baudrate, bytesize, stopbits, parity, PortS, SaveConf, timeout,
     PortS.destroy()
         
 def Select(baudrate, SaveConf=False, path=None, bytesize=serial.EIGHTBITS, stopbits=serial.STOPBITS_ONE, parity=serial.PARITY_NONE, timeout=None, xonxoff=False, rtscts=False, dsrdtr=False):
+    if SaveConf==True and path==None:
+        import os, sys, inspect
+        #-> http://code.activestate.com/recipes/579018-python-determine-name-and-directory-of-the-top-lev/
+        for teil in inspect.stack():
+
+            if teil[1].startswith("<"):
+                continue
+            if teil[1].upper().startswith(sys.exec_prefix.upper()):
+                continue
+            trc = teil[1]
+                
+        if getattr(sys, 'frozen', False):
+            scriptdir, scriptname = os.path.split(sys.executable)
+            return {"dir": scriptdir,
+                    "name": scriptname,
+                    "source": trc}
+
+        scriptdir, trc = os.path.split(trc)
+        if not scriptdir:
+            scriptdir = os.getcwd()
+
+        scr_dict ={"name": trc,
+                    "source": trc,
+                    "dir": scriptdir}
+        Caller =scr_dict['name'].replace(".py","").replace(".pyw","")
+
+        Appdata = os.getenv('APPDATA')+"\\Python\\serialSelect"
+
+        if not os.path.exists(Appdata):
+            os.makedirs(Appdata)
+        
+        path=Appdata+"\\"+Caller+".Conf"
+        
     PortS = Tk()
     PortS.geometry('240x60')
     PortS.title("Configurator")

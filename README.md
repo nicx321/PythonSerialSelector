@@ -12,9 +12,15 @@
 	Or
 	```
 	import serialSelect
+	port = serialSelect.Select(9600, True)
+	```
+	This would return serial port "port" with baudrate 9600 and save that port number into conf.conf in AppData/Roaming/Python/<Caller name> so it can be preset on next startup.
+	Or
+	```
+	import serialSelect
 	port = serialSelect.Select(9600, True, "conf.conf")
 	```
-	This would return serial port "port" with baudrate 9600 and save that port number into conf.conf so it can be preset on next startup.
+	This would return serial port "port" with baudrate 9600 and save that port number into conf.conf in folder with serialSelect so it can be preset on next startup.
 
 5. another arguments are these:
 	* Select(baudrate, SaveConf, path, bytesize, stopbits, parity, timeout, xonxoff, rtscts, dsrdtr)
