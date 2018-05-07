@@ -35,6 +35,9 @@ def Select(baudrate, SaveConf=False, path=None, bytesize=serial.EIGHTBITS, stopb
     for element in listp:
         choices[element.device]=i
         i+=1
+
+    if i == 0:
+        choices['None']=i
     if SaveConf:
         try:
             with open(path,"r+") as f:
